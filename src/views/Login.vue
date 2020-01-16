@@ -39,14 +39,27 @@
     },
     methods: {
       login() {
-        let userInfo = {account:this.loginForm.account, password:this.loginForm.password};
-        this.$api.login(JSON.stringify(userInfo)).then((res) => {
-            Cookies.set('token', res.data.token); // 放置token到Cookie
-            sessionStorage.setItem('user', userInfo.account);// 保存用户到本地会话
+        this.loading = true
+        let userInfo = {account:this.loginForm.account, password:this.loginForm.password, captcha:this.loginForm.captcha}
+        this.$api.login(userInfo).then((res) => {
+          if(res.msg != null) {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          } else {
+            Cookies.set('token', res.data.token) // 放置token到Cookie
+            sessionStorage.setItem('user', userInfo.account) // 保存用户到本地会话
+            this.$store.commit('menuRouteLoaded', false) // 要求重新加载导航菜单
             this.$router.push('/')  // 登录成功，跳转到主页
-          }).catch(function(res) {
-            alert(res);
-          });
+          }
+          this.loading = false
+        }).catch((res) => {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
+        });
       },
       reset() {
         this.$refs.loginForm.resetFields();

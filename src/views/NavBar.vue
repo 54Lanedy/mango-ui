@@ -28,22 +28,22 @@ export default {
       themeColor: state=>state.app.themeColor,
       navTree: state=>state.menu.navTree
     }),
-    mainTabs: {
-      get() {return this.$store.state.tab.mainTabs},
-      set(val) {this.$store.commit('updateMainTabs',val)}
-    },
-    mainTabsActiveName: {
-      get() {return this.$store.state.tab.mainTabs},
-      set(val) {this.$store.commit('updateMainTabsActiveName', val)}
-    }
+    // mainTabs: {
+    //   get() {return this.$store.state.tab.mainTabs},
+    //   set(val) {this.$store.commit('updateMainTabs',val)}
+    // },
+    // mainTabsActiveName: {
+    //   get() {return this.$store.state.tab.mainTabs},
+    //   set(val) {this.$store.commit('updateMainTabsActiveName', val)}
+    // }
   },
   //监测Vue实例上的数据变动;$route是一个跳转的路由对象，每一个路由都会有一个route对象，是一个局部的对象
-  watch: {
-    $route: 'handleRoute'
-  },
-  created() {
-    this.handleRoute(this.$route);
-  },
+  // watch: {
+  //   $route: 'handleRoute'
+  // },
+  // created() {
+  //   this.handleRoute(this.$route);
+  // },
   methods: {
     handleopen() {
       console.log('handleopen')
@@ -55,23 +55,23 @@ export default {
       console.log('handleselect')
     },
     //路由操作处理
-    handleRoute(route){
-      // tab标签页选中, 如果不存在则先添加
-      var tab = this.mainTabs.filter(item => item.name === route.name)[0];
-      if (!tab) {
-        tab = {
-          name: route.name,
-          title: route.name,
-          icon: route.meta.icon
-        }
-        this.mainTabs.this.mainTabs.concat(tab);
-        // 切换标签页时同步更新高亮菜单
-        if (this.$refs.navmenu != null) {
-          this.$refs.navmenu.activeIndex = '' + route.meta.index;
-          this.$refs.navmenu.initOpenedMenu();
-        }
-      }
-    }
+    // handleRoute(route){
+    //   // tab标签页选中, 如果不存在则先添加
+    //   var tab = this.mainTabs.filter(item => item.name === route.name)[0];
+    //   if (!tab) {
+    //     tab = {
+    //       name: route.name,
+    //       title: route.name,
+    //       icon: route.meta.icon
+    //     }
+    //     this.mainTabs.this.mainTabs.concat(tab);
+    //     // 切换标签页时同步更新高亮菜单
+    //     if (this.$refs.navmenu != null) {
+    //       this.$refs.navmenu.activeIndex = '' + route.meta.index;
+    //       this.$refs.navmenu.initOpenedMenu();
+    //     }
+    //   }
+    // }
   }
 }
 </script>

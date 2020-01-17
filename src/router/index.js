@@ -5,6 +5,7 @@ import Home from '@/views/Home';
 import NotFound from '@/views/404';
 import api from '@/http/api';
 import store from "@/store";
+import Intro from "@/views/Intro/Intro";
 
 Vue.use(Router);
 
@@ -14,7 +15,17 @@ const router = new Router({
       path: '/',
       name: '首页',
       component: Home,
-      children:[]
+      children:[
+        {
+          path: '',
+          name: '系统介绍',
+          component: Intro,
+          meta:{
+            icon: 'fa fa-home fa-lg',
+            index: 0
+          }
+        }
+      ]
     },
     {
       path: '/login',
@@ -27,7 +38,7 @@ const router = new Router({
       component: NotFound
     }
   ]
-})
+});
 
 //添加导航守卫，根据用户登录会话记录，路由到主页或登录界面。
 router.beforeEach((to, from, next) => {
@@ -106,7 +117,7 @@ function addDynamicRoutes(menuList = [], routes = []) {
       };
       try{
         // 根据菜单URL动态加载vue组件，这里要求vue组件须按照url路径存储
-        // 如url="sys/user"，则组件路径应是"@/views/sys/user.vue",否则组件加载不到
+        // 如url="sys/user"，则组件路径应是"@/views/Sys/User.vue",否则组件加载不到
         let array = menuList[i].url.split('/');
         let url = '';
         for (let i = 0; i < array.length; i++) {
@@ -114,7 +125,7 @@ function addDynamicRoutes(menuList = [], routes = []) {
         }
         url = url.substring(0, url.length - 1);
         route['component'] = resolve => require([`@/views/${url}`], resolve);
-      }catch (e) { }
+      }catch (e) {}
       routes.push(route);
     }
   }

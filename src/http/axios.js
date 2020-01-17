@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import router from '@/router'
 
 export default function $axios(options) {
+  //Promise异步编程的一种解决方案，本身是一个构造函数
   return new Promise((resolve, reject) => {
     //创建一个拥有通用配置的axios实例,注意baseURL、headers、timeout等属性名大小写
     const instance = axios.create({
@@ -144,5 +145,7 @@ export default function $axios(options) {
     }).catch(error => {
       reject(error)
     })
+  }).catch(function(reason) {
+    console.log('catch:', reason);
   })
 }

@@ -11,5 +11,7 @@ export default {
     setNavTree(state, navTree) {
       state.navTree = navTree;
     }
+  },
+  actions: {
   }
 }

@@ -17,7 +17,7 @@ Vue.use(ElementUI);
 Vue.use(api);
 
 // 挂载全局配置模块
-Vue.prototype.global = global
+Vue.prototype.global = global;
 Vue.config.productionTip = false;
 
 

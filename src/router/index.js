@@ -1,23 +1,24 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '@/views/Home'
-import Login from '@/views/Login'
-import NotFound from '@/views/404'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Login from '@/views/Login';
+import Home from '@/views/Home';
+import NotFound from '@/views/404';
+import api from '@/http/api';
 import store from "@/store";
-import api from '@/http/interface'
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Home
+      name: '首页',
+      component: Home,
+      children:[]
     },
     {
       path: '/login',
-      name: Login,
+      name: '登陆',
       component: Login
     },
     {
@@ -33,20 +34,21 @@ router.beforeEach((to, from, next) => {
   // 登录界面登录成功之后，会把用户信息保存在会话
   // 存在时间为会话生命周期，页面关闭即失效。
   // let token = Cookies.get('token')
-  let user = sessionStorage.getItem('user');
+  let userName = sessionStorage.getItem('user');
   if(to.path == '/login'){
     // 如果是访问登录界面，如果用户会话信息存在，代表已登录过，跳转到主页
-    if(user){
+    if(userName){
       next({path:'/'})
     }else{
       next()
     }
   }else{
-    if(!user){
+    if(!userName){
       // 如果访问非登录界面，且户会话信息不存在，代表未登录，则跳转到登录界面
       next({path:'/login'})
     }else{
-      next()
+      addDynamicMenuAndRoutes(userName, to, from);
+      next();
     }
   }
 });
@@ -55,28 +57,29 @@ router.beforeEach((to, from, next) => {
  * 加载动态菜单和路由
  */
 function addDynamicMenuAndRoutes(userName, to, from) {
-  if (store.state.app.menuRouteLoaded) {
-    console.log('动态菜单和路由已经存在.')
+  if(store.state.app.menuRouteLoaded) {
+    console.log('动态菜单和路由已经存在.');
     return
   }
-  api.menu.findNavTree({'userName': userName})
+  api.menu.findNavTree({'userName':userName})
     .then(res => {
       // 添加动态路由
-      let dynamicRoutes = addDynamicRoutes(res.data());
-      router.options.router[0].children = router.options.routes[0].children.concat(dynamicRoutes);
+      let dynamicRoutes = addDynamicRoutes(res.data);
+      //给首页添加左侧菜单
+      router.options.routes[0].children = router.options.routes[0].children.concat(dynamicRoutes);
       router.addRoutes(router.options.routes);
-      //保存加载状态
+      // 保存加载状态
       store.commit('menuRouteLoaded', true);
-      //保存菜单树
-      store.commit('setNavTree', res.data());
+      // 保存菜单树
+      store.commit('setNavTree', res.data)
     }).then(res => {
-    api.user.findPermissions({'name': userName}).then(res => {
-      //保存用户权限标识集合
-      store.commit('setPerms', res.data);
+      api.user.findPermissions({'name':userName}).then(res => {
+      // 保存用户权限标识集合
+      store.commit('setPerms', res.data)
     })
-  }).catch(function (res) {
-
-  });
+  })
+    .catch(function(res) {
+    })
 }
 
 /**
@@ -106,7 +109,7 @@ function addDynamicRoutes(menuList = [], routes = []) {
         // 如url="sys/user"，则组件路径应是"@/views/sys/user.vue",否则组件加载不到
         let array = menuList[i].url.split('/');
         let url = '';
-        for (let i = 0; array.length; i++) {
+        for (let i = 0; i < array.length; i++) {
           url += array[i].substring(0, 1).toUpperCase() + array[i].substring(1) + '/';
         }
         url = url.substring(0, url.length - 1);
@@ -118,11 +121,11 @@ function addDynamicRoutes(menuList = [], routes = []) {
   if (temp.length >= 1) {
     addDynamicRoutes(temp, routes);
   }else {
-    console.log('动态路由加载...')
-    console.log(routes)
-    console.log('动态路由加载完成.')
+    console.log('动态路由加载...');
+    console.log(routes);
+    console.log('动态路由加载完成.');
   }
-
+  return routes;
 }
 
 export default router

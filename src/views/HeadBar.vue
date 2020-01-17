@@ -123,12 +123,10 @@ export default {
     var user = sessionStorage.getItem("user");
     if (user) {
       let params = {name: user};
-      this.$api.user.findByName(params).then((res) => {
-        if (res.code == 200){
-          this.user = res.data;
-          this.user.avatar = require('@/assets/user.png')
-        }
-      });
+      if (user) {
+        this.user.name = user;
+        this.user.avatar = require("@/assets/user.png")
+      }
     }
   },
   computed:{

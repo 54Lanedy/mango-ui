@@ -15,6 +15,6 @@ const store = new vuex.Store({
       user: user,
       menu: menu
     }
-})
+});
 
 export default store

@@ -70,7 +70,7 @@
       },
       hasColumn: function (column) {
         for(let i = 0; i <this.selections.length; i++) {
-          let col = this.selections[i]
+          let col = this.selections[i];
           if(column.prop == col.prop) {
             return true
           }

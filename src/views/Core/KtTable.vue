@@ -68,7 +68,7 @@
       //是否显示边框
       border:{
         type: Boolean,
-        default: true
+        default: false
       },
       //是否显示斑马线
       stripe: {
@@ -109,37 +109,37 @@
       findPage: function () {
         this.loading = true;
         let callback = res => {
-          this.loading = false;
+          this.loading = false
         };
         //$emit 触发父组件的自定义事件
-        this.$emit('findPage',{pageRequest:this.pageRequest, callback: callback})
+        this.$emit('findPage', {pageRequest:this.pageRequest, callback:callback})
       },
       // 选择切换
       selectionChange:function (selections) {
         this.selections = selections;
-        this.$emit('handleCurrentChange',{selections: selections})
+        this.$emit('selectionChange',{selections: selections})
       },
       //选择切换
-      handleCurrentChange:function (val) {
-        this.$emit('handleCurrentChange',{val: val})
+      handleCurrentChange: function (val) {
+        this.$emit('handleCurrentChange', {val:val})
       },
       //换页刷新
-      refreshPageRequest:function (pageName) {
-        this.pageRequest.pageNum = pageName;
+      refreshPageRequest: function (pageNum) {
+        this.pageRequest.pageNum = pageNum;
         this.findPage();
       },
       //编辑
       handleEdit: function (index, row) {
-        this.$emit('handleEdit',{index:index, row: row})
+        this.$emit('handleEdit', {index:index, row:row})
       },
       //删除
       handleDelete: function (index, row) {
-        this.delete({index:index, row: row})
+        this.delete(row.id)
       },
       //批量删除
-      handleBatchDelete:function () {
+      handleBatchDelete: function () {
         let ids = this.selections.map(item => item.id).toString();
-        this.delete(ids);
+        this.delete(ids)
       },
       //删除操作
       delete:function (ids) {

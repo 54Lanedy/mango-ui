@@ -18,10 +18,11 @@ export default function $axios(options) {
     //request 拦截器
     instance.interceptors.request.use(
       config => {
-        let token = Cookies.get('token')
+        let token = Cookies.get('token');
         // 1. 请求开始的时候可以结合 vuex 开启全屏 loading 动画
         // console.log(store.state.loading)
-        console.log('准备发送请求...')
+        console.log('\n');
+        console.log('准备发送请求...');
         //2.带上token
         if (token) {
           config.headers.accessToken = token
@@ -145,7 +146,7 @@ export default function $axios(options) {
     }).catch(error => {
       reject(error)
     })
-  }).catch(function(reason) {
+  }).catch(function (reason) {
     console.log('catch:', reason);
   })
 }

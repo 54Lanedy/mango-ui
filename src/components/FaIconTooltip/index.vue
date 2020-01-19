@@ -1,4 +1,3 @@
-  
 <template>
   <el-tooltip class="tooltip" placement="top" effect="light">
     <div slot="content">
@@ -13,22 +12,22 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-    };
-  },
-  methods: {
+  export default {
+    data() {
+      return {
+      };
+    },
+    methods: {
 
-  },
-  mounted() {
+    },
+    mounted() {
 
-  }
-};
+    }
+  };
 </script>
 
 <style scoped lang="scss">
-.tooltip {
-  padding: 10px;
-}
+  .tooltip {
+    padding: 10px;
+  }
 </style>

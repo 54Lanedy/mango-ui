@@ -6,6 +6,13 @@ import NotFound from '@/views/404';
 import api from '@/http/api';
 import store from "@/store";
 import Intro from "@/views/Intro/Intro";
+import { getIFramePath, getIFrameUrl } from '@/utils/iframe'
+//控制台报[NavigationDuplicated {_name: "NavigationDuplicated", name: "NavigationDuplicated"}]异常。
+//其原因在于Vue-router在3.1之后把$router.push()方法改为了Promise。所以假如没有回调函数，错误信息就会交给全局的路由错误处理，因此就会报上述的错误
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err);
+};
 
 Vue.use(Router);
 
@@ -67,6 +74,8 @@ router.beforeEach((to, from, next) => {
  * 加载动态菜单和路由
  */
 function addDynamicMenuAndRoutes(userName, to, from) {
+  //处理IFrame嵌套页面
+  handleIFrameUrl(to.path);
   if(store.state.app.menuRouteLoaded) {
     console.log('动态菜单和路由已经存在.');
     return
@@ -113,17 +122,29 @@ function addDynamicRoutes(menuList = [], routes = []) {
           index:menuList[i].id
         }
       };
-      try{
-        // 根据菜单URL动态加载vue组件，这里要求vue组件须按照url路径存储
-        // 如url="sys/user"，则组件路径应是"@/views/Sys/User.vue",否则组件加载不到
-        let array = menuList[i].url.split('/');
-        let url = '';
-        for (let i = 0; i < array.length; i++) {
-          url += array[i].substring(0, 1).toUpperCase() + array[i].substring(1) + '/';
+      let path = getIFramePath(menuList[i].url);
+      if (path) {
+        //如果是嵌套页面，通过iframe展示
+        route['path'] = path;
+        route['component'] = resolve => require([`@/views/IFrame/IFrame`], resolve);
+        // 存储嵌套页面路径和访问url
+        let url = getIFrameUrl(menuList[i].url);
+        let iFrameUrl = {'path':path, 'url': url};
+        store.commit('addIFrameUrl', iFrameUrl);
+      }else {
+        try {
+          // 根据菜单URL动态加载vue组件，这里要求vue组件须按照url路径存储
+          // 如url="sys/user"，则组件路径应是"@/views/Sys/User.vue",否则组件加载不到
+          let array = menuList[i].url.split('/');
+          let url = '';
+          for (let i = 0; i < array.length; i++) {
+            url += array[i].substring(0, 1).toUpperCase() + array[i].substring(1) + '/';
+          }
+          url = url.substring(0, url.length - 1);
+          route['component'] = resolve => require([`@/views/${url}`], resolve);
+        } catch (e) {
         }
-        url = url.substring(0, url.length - 1);
-        route['component'] = resolve => require([`@/views/${url}`], resolve);
-      }catch (e) {}
+      }
       routes.push(route);
     }
   }
@@ -135,6 +156,23 @@ function addDynamicRoutes(menuList = [], routes = []) {
     console.log('动态路由加载完成.');
   }
   return routes;
+}
+
+/**
+ * 嵌套IFrame组件
+ */
+function handleIFrameUrl(path) {
+  // 嵌套页面，保存iframeUrl到store，供IFrame组件读取展示
+  let url = path
+  let length = store.state.iframe.iframeUrls.length
+  for(let i=0; i<length; i++) {
+    let iframe = store.state.iframe.iframeUrls[i]
+    if(path != null && path.endsWith(iframe.path)) {
+      url = iframe.url
+      store.commit('setIFrameUrl', url)
+      break
+    }
+  }
 }
 
 export default router

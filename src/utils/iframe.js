@@ -34,4 +34,3 @@ export function getIFrameUrl (url) {
   }
   return iframeUrl
 }
-

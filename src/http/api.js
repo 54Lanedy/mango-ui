@@ -10,6 +10,7 @@ import * as menu from './modules/menu'
 import * as dict from './modules/dict'
 import * as config from './modules/config'
 import * as log from './modules/log'
+import * as loginlog from './modules/loginlog'
 
 
 // 默认全部导出
@@ -21,5 +22,6 @@ export default {
   menu,
   dict,
   config,
-  log
+  log,
+  loginlog
 }

@@ -190,7 +190,6 @@
         let pageRequest = { pageNum: 1, pageSize: 10000000 };
         pageRequest.params = [{name:'status', value:'online'}];
         this.$api.loginlog.findPage(pageRequest).then((res) => {
-          debugger
           this.onlineUser = res.data.content.length
         })
       },

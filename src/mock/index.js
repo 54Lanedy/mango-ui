@@ -18,13 +18,13 @@ let openMock = true;
 let closeMock = false;
 fnCreate(login, closeMock)
 fnCreate(user, closeMock)
-fnCreate(role, openMock)
-fnCreate(dept, openMock)
-fnCreate(menu, openMock)
-fnCreate(dict, openMock)
-fnCreate(config, openMock)
-fnCreate(log, openMock)
-fnCreate(loginlog, openMock)
+fnCreate(role, closeMock)
+fnCreate(dept, closeMock)
+fnCreate(menu, closeMock)
+fnCreate(dict, closeMock)
+fnCreate(config, closeMock)
+fnCreate(log, closeMock)
+fnCreate(loginlog, closeMock)
 
 /**
  * 创建mock模拟数据

@@ -140,10 +140,10 @@
     methods: {
       // 获取分页数据
       findPage: function (data) {
-        if(data !== null) {
+        if (data !== null) {
           this.pageRequest = data.pageRequest
         }
-        this.pageRequest.columnFilters = {name: {name:'name', value:this.filters.name}};
+        this.pageRequest.columnFilters = {name: {name: 'name', value: this.filters.name}};
         this.$api.user.findPage(this.pageRequest).then((res) => {
           this.pageResult = res.data;
           this.findUserRoles()
@@ -158,7 +158,7 @@
       },
       // 批量删除
       handleDelete: function (data) {
-        this.$api.user.batchDelete(data.params).then(data!=null?data.callback:'')
+        this.$api.user.batchDelete(data.params).then(data != null ? data.callback : '')
       },
       // 显示新增界面
       handleAdd: function () {
@@ -181,8 +181,8 @@
         this.dialogVisible = true
         this.operation = false
         this.dataForm = Object.assign({}, params.row)
-        let userRoles = []
-        for(let i=0,len=params.row.userRoles.length; i<len; i++) {
+        let userRoles = [];
+        for (let i = 0, len = params.row.userRoles.length; i < len; i++) {
           userRoles.push(params.row.userRoles[i].roleId)
         }
         this.dataForm.userRoles = userRoles
@@ -195,7 +195,7 @@
               this.editLoading = true
               let params = Object.assign({}, this.dataForm)
               let userRoles = []
-              for(let i=0,len=params.userRoles.length; i<len; i++) {
+              for (let i = 0, len = params.userRoles.length; i < len; i++) {
                 let userRole = {
                   userId: params.id,
                   roleId: params.userRoles[i]
@@ -205,8 +205,8 @@
               params.userRoles = userRoles
               this.$api.user.save(params).then((res) => {
                 this.editLoading = false
-                if(res.code == 200) {
-                  this.$message({ message: '操作成功', type: 'success' })
+                if (res.code == 200) {
+                  this.$message({message: '操作成功', type: 'success'})
                   this.dialogVisible = false
                   this.$refs['dataForm'].resetFields()
                 } else {
@@ -225,12 +225,12 @@
         })
       },
       // 菜单树选中
-      deptTreeCurrentChangeHandle (data, node) {
+      deptTreeCurrentChangeHandle(data, node) {
         this.dataForm.deptId = data.id;
         this.dataForm.deptName = data.name
       },
       // 时间格式化
-      dateFormat: function (row, column, cellValue, index){
+      dateFormat: function (row, column, cellValue, index) {
         return format(row[column.property])
       },
       // 处理表格列过滤显示
@@ -245,13 +245,13 @@
       // 处理表格列过滤显示
       initColumns: function () {
         this.columns = [
-          {prop:"id", label:"ID", minWidth:50},
-          {prop:"name", label:"用户名", minWidth:120},
-          {prop:"deptName", label:"机构", minWidth:120},
-          {prop:"roleNames", label:"角色", minWidth:100},
-          {prop:"email", label:"邮箱", minWidth:120},
-          {prop:"mobile", label:"手机", minWidth:100},
-          {prop:"status", label:"状态", minWidth:70},
+          {prop: "id", label: "ID", minWidth: 50},
+          {prop: "name", label: "用户名", minWidth: 120},
+          {prop: "deptName", label: "机构", minWidth: 120},
+          {prop: "roleNames", label: "角色", minWidth: 100},
+          {prop: "email", label: "邮箱", minWidth: 120},
+          {prop: "mobile", label: "手机", minWidth: 100},
+          {prop: "status", label: "状态", minWidth: 70},
           // {prop:"createBy", label:"创建人", minWidth:120},
           // {prop:"createTime", label:"创建时间", minWidth:120, formatter:this.dateFormat}
           // {prop:"lastUpdateBy", label:"更新人", minWidth:100},

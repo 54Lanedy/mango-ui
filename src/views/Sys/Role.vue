@@ -184,7 +184,7 @@
           return
         }
         this.selectRole = val.val;
-        this.$api.role.findRoleMenus({'roleId':val.val}).then(res => {
+        this.$api.role.findRoleMenus({'roleId':val.val.id}).then(res => {
           this.currentRoleMenus = res.data;
           this.$refs.menuTree.setCheckedNodes(res.data);
         })

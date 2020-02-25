@@ -1,13 +1,13 @@
 import axios from '../axios'
 
-/* 
+/*
  * 用户管理模块
  */
 
 // 保存
 export const save = (data) => {
     return axios({
-        url: '/user/save',
+        url: 'user/save',
         method: 'post',
         data
     })
@@ -15,7 +15,7 @@ export const save = (data) => {
 // 删除
 export const batchDelete = (data) => {
     return axios({
-        url: '/user/delete',
+        url: 'user/delete',
         method: 'post',
         data
     })
@@ -23,7 +23,7 @@ export const batchDelete = (data) => {
 // 分页查询
 export const findPage = (data) => {
     return axios({
-        url: '/user/findPage',
+        url: 'user/findPage',
         method: 'post',
         data
     })
@@ -31,7 +31,7 @@ export const findPage = (data) => {
 // 查找用户的菜单权限标识集合
 export const findPermissions = (params) => {
     return axios({
-        url: '/user/findPermissions',
+        url: 'user/findPermissions',
         method: 'get',
         params
     })
